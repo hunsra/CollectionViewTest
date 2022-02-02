@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:CollectionViewTest"
+             x:DataType="loc:MainViewModel"
+             BindingContext="{Binding Source={x:Static loc:ViewModelLocator.MainViewModel}}"
+             x:Class="CollectionViewTest.StartPage"
+             Title="CollectionViewTest">
+    <StackLayout HorizontalOptions="CenterAndExpand"
+                 VerticalOptions="CenterAndExpand">
+        <Button HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Text="Show Items"
+                Clicked="Button_Clicked" />
+    </StackLayout>
+</ContentPage>

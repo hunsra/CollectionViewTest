@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:loc="clr-namespace:CollectionViewTest"
+             x:DataType="loc:MainViewModel"
+             BindingContext="{Binding Source={x:Static loc:ViewModelLocator.MainViewModel}}"
+             Title="Items"
+             x:Class="CollectionViewTest.MainPage">
+
+    <ContentPage.Resources>
+        <xct:InvertedBoolConverter x:Key="InvertedBooleanConverter" />
+        <loc:BooleanToTextConverter x:Key="BooleanToTextConverter" />
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Refresh"
+                     Command="{Binding GetDataCommand}" />
+        <ToolbarItem Text="Clear"
+                     Command="{Binding ClearDataCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid ColumnDefinitions="*"
+          RowDefinitions="*">
+        
+        <CollectionView x:Name="ItemsCollectionView"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand"
+                        ItemSizingStrategy="MeasureAllItems"
+                        ItemsSource="{Binding Items}"
+                        SelectedItem="{Binding SelectedItem}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBooleanConverter}}">
+
+            <CollectionView.EmptyView>
+                <StackLayout Orientation="Vertical"
+                             HorizontalOptions="CenterAndExpand"
+                             VerticalOptions="CenterAndExpand">
+                    <Label  HorizontalOptions="CenterAndExpand"
+                            VerticalOptions="CenterAndExpand"
+                            FontSize="Medium"
+                            TextColor="Default"
+                            Text="{Binding IsBusy, Converter={StaticResource BooleanToTextConverter}, ConverterParameter='Loading...,Tap refresh to load items.'}" />
+
+                </StackLayout>
+            </CollectionView.EmptyView>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="loc:ItemViewModel">
+                    <Grid x:Name="ItemGrid"
+                          ColumnDefinitions="*, Auto"
+                          RowDefinitions="*, *">
+                        <BoxView Grid.Column="0"
+                                 Grid.ColumnSpan="2"
+                                 Grid.Row="0"
+                                 Grid.RowSpan="2"
+                                 Margin="10"
+                                 CornerRadius="10"
+                                 BackgroundColor="Gray" />
+                        <Label Grid.Column="0"
+                               Grid.Row="0"
+                               Margin="20,10,20,0"
+                               FontSize="Medium"
+                               TextColor="White"
+                               Text="{Binding Value1}" />
+                        <Label Grid.Column="0"
+                               Grid.Row="1"
+                               Margin="20,0,20,0"
+                               FontSize="Small"
+                               TextColor="White"
+                               Text="{Binding Value2}" />
+                        <Button Grid.Column="1"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Margin="0,10,10,10"
+                                WidthRequest="40"
+                                BackgroundColor="Transparent"
+                                TextColor="White"
+                                Text="X"
+                                Command="{Binding BindingContext.DeleteCommand, Source={x:Reference ItemsCollectionView}}"
+                                CommandParameter="{Binding Instance}"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ActivityIndicator HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           Grid.Column="0"
+                           Grid.Row="0"
+                           IsRunning="{Binding IsBusy}" />
+    </Grid>
+
+</ContentPage>
